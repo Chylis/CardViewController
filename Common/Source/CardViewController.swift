@@ -38,6 +38,13 @@ public class CardViewController: UIViewController {
     
     public var delegate: CardViewControllerDelegate? = nil
     
+    ///The size of the card in relation to the parent view. By default, a card is half the size of the parent view.
+    public var cardSizeRatio: CGFloat = 0.5 {
+        didSet {
+            scrollView.pageSizeFactor = cardSizeRatio
+        }
+    }
+    
     ///The number of degrees to rotate the background cards
     public var degreesToRotateCard: CGFloat = 45
     
@@ -63,7 +70,7 @@ public class CardViewController: UIViewController {
     
     private var hasLaidOutSubviews = false
     fileprivate var currentCardIndex: Int = 0
-    fileprivate var cards: [UIView] = []
+    internal var cards: [UIView] = []
     
     //Spacing between cards
     fileprivate let cardSpacing: CGFloat = 0
@@ -100,6 +107,7 @@ public class CardViewController: UIViewController {
     
     private func add(cards: [UIView]) {
         for card in cards {
+            //IMPORTANT: If we change add any horizontal spacing between cards we must also change the 'pageSize()' method is 'UIScrollView+Utils' to account for it
             contentView.addArrangedSubview(card)
             
             //Set up width and height constraints
@@ -107,8 +115,7 @@ public class CardViewController: UIViewController {
             card.heightAnchor.constraint(equalTo: card.widthAnchor).isActive = true
             
             //A card is half the size of the view
-            //FIXME: Ugly: If we change this value we must also change the 'pageSize()' method is 'UIScrollView+Utils' (together with any eventual card spacing)
-            card.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.5).isActive = true
+            card.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: cardSizeRatio).isActive = true
         }
     }
     
@@ -170,12 +177,16 @@ public class CardViewController: UIViewController {
             return
         }
         
-        guard card(at: selectedCardIndex) != nil else {
+        scrollToCardAtIndex(selectedCardIndex)
+    }
+    
+    ///Navigates to the card at the received index, if the index is within bounds
+    public func scrollToCardAtIndex(_ index: Int) {
+        guard card(at: index) != nil else {
             return
         }
-        
         scrollViewWillScrollToCard()
-        scrollView.scrollToPageAtIndex(selectedCardIndex, animated: true)
+        scrollView.scrollToPageAtIndex(index, animated: true)
     }
     
     ///Prepares the scroll view prior to programatically scrolling to a card

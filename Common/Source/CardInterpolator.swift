@@ -53,6 +53,6 @@ public struct CardInterpolator {
     //MARK: Othher
     
     public static func easeOut(_ input: CGFloat) -> CGFloat {
-        return (cos((input + 1) * CGFloat(M_PI)) / 2.0) + 0.5
+        return (cos((input + 1) * .pi) / 2.0) + 0.5
     }
 }

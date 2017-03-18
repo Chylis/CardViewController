@@ -1,4 +1,5 @@
 Framework:
+- Prefix all category/extension methods with unique prefix to this framework
 - Height must be >= width or else the rotation animation looks awkward (e.g. it looks awkard if height is width/2)
 - Landscape foreground card is outside of screen?
 

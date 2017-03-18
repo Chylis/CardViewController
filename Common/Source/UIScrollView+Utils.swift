@@ -11,6 +11,27 @@ import Foundation
 import UIKit
 
 extension UIScrollView {
+    private struct AssociatedKeys {
+        static var pageSizeFactor = "mge_ScrollViewPageSizeFactor"
+    }
+    
+    var pageSizeFactor: CGFloat? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.pageSizeFactor) as? CGFloat
+        }
+        set {
+            if let newValue = newValue {
+                objc_setAssociatedObject(self,
+                                         &AssociatedKeys.pageSizeFactor,
+                                         newValue as CGFloat?,
+                                         .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+                )
+            }
+        }
+    }
+}
+
+extension UIScrollView {
     
     func scrollToPageAtIndex(_ index: Int, animated: Bool = false) {
         let newX = CGFloat(index) * pageSize()
@@ -67,7 +88,7 @@ extension UIScrollView {
     }
     
     func pageSize() -> CGFloat {
-        //FIXME: Make configurable (this value must correspond to the card width + card spacing)
-        return bounds.size.width / 2
+        //NOTE: This value must correspond to the card width + card spacing
+        return bounds.size.width * (pageSizeFactor ?? 0.5)
     }
 }
