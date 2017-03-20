@@ -23,11 +23,9 @@ public struct CardViewControllerFactory {
     }
 }
 
-public protocol CardViewControllerDelegate {
-    
-    func cardViewController(_ cardViewController: CardViewController,
-                            didSelect card: UIView,
-                            at index: Int)
+public protocol CardViewControllerDelegate: class {
+    func cardViewController(_ cardViewController: CardViewController, didSelect card: UIView, at index: Int)
+    func cardViewController(_ cardViewController: CardViewController, didNavigateTo card: UIView, at index: Int)
 }
 
 public typealias TransitionInterpolator = (_ transitionProgress: CGFloat) -> (CGFloat)
@@ -36,12 +34,28 @@ public class CardViewController: UIViewController {
     
     //MARK: Configurable
     
-    public var delegate: CardViewControllerDelegate? = nil
+    public weak var delegate: CardViewControllerDelegate? = nil
     
-    ///The size of the card in relation to the parent view. By default, a card is half the size of the parent view.
-    public var cardSizeRatio: CGFloat = 0.5 {
+    ///The width of the card in relation to the parent view. 
+    ///Must be between 0.1 - 1.0. Default is 0.5 (i.e. half the size of the parent view).
+    public var cardWidthRatio: CGFloat = 0.5 {
         didSet {
-            scrollView.cv_pageSizeFactor = cardSizeRatio
+            let minValue: CGFloat = 0.1
+            let maxValue: CGFloat = 1.0
+            cardWidthRatio = max(minValue, min(maxValue, cardWidthRatio))
+            
+            //Update the scroll view's horizontal page size
+            scrollView.cv_pageSizeFactor = cardWidthRatio
+        }
+    }
+    
+    ///The height of the card in relation to its own width.
+    ///Must be between 0.5 - 2. Default is 1.0 (i.e. the same height as width).
+    public var cardHeightRatio: CGFloat = 1.0  {
+        didSet {
+            let minValue: CGFloat = 0.5
+            let maxValue: CGFloat = 2.0
+            cardHeightRatio = max(minValue, min(maxValue, cardHeightRatio))
         }
     }
     
@@ -69,7 +83,16 @@ public class CardViewController: UIViewController {
     //MARK: Properties
     
     private var hasLaidOutSubviews = false
-    fileprivate var currentCardIndex: Int = 0
+    internal var currentCardIndex: Int = 0 {
+        didSet {
+            guard let delegate = delegate,
+                let card = card(at: currentCardIndex),
+                oldValue != currentCardIndex else {
+                return
+            }
+            delegate.cardViewController(self, didNavigateTo: card, at: currentCardIndex)
+        }
+    }
     internal var cards: [UIView] = []
     
     //Spacing between cards
@@ -107,15 +130,15 @@ public class CardViewController: UIViewController {
     
     private func add(cards: [UIView]) {
         for card in cards {
-            //IMPORTANT: If we change add any horizontal spacing between cards we must also change the 'pageSize()' method is 'UIScrollView+Utils' to account for it
+            //IMPORTANT: Changes to the horizontal spacing between cards must be reflected in 'UIScrollView::pageSize()' to account for it
             contentView.addArrangedSubview(card)
-            
-            //Set up width and height constraints
             card.translatesAutoresizingMaskIntoConstraints = false
-            card.heightAnchor.constraint(equalTo: card.widthAnchor).isActive = true
             
-            //A card is half the size of the view
-            card.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: cardSizeRatio).isActive = true
+            //Set up width in relation to the parent view
+            card.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: cardWidthRatio).isActive = true
+            
+            //Set up height in relation to the card's own width
+            card.heightAnchor.constraint(equalTo: card.widthAnchor, multiplier: cardHeightRatio).isActive = true
         }
     }
     
@@ -140,18 +163,18 @@ public class CardViewController: UIViewController {
         }
     }
     
-    /// Updates the leading and trailing constraints to be 1/4 of the device width
+    /// Updates the leading and trailing constraints to the remaining width of the screen
     private func updateOrientationRelatedConstraints() {
-        let borderMargin = self.view.bounds.width/4
-        leadingConstraint.constant = borderMargin
-        trailingConstraint.constant = borderMargin
+        let totalBorderMargin = view.bounds.width * (1 - cardWidthRatio)
+        leadingConstraint.constant = totalBorderMargin / 2.0
+        trailingConstraint.constant = totalBorderMargin / 2.0
     }
     
     
     //MARK: Helper
     
     /// Returns the card at the received index, or nil if the index is out of bounds
-    fileprivate func card(at index: Int) -> UIView? {
+    internal func card(at index: Int) -> UIView? {
         guard index >= 0 && index < cards.count else {
             return nil
         }
@@ -160,25 +183,6 @@ public class CardViewController: UIViewController {
     }
     
     //MARK: Card navigation
-    
-    @IBAction func onScrollViewTapped(_ sender: UITapGestureRecognizer) {
-        guard let currentCard = card(at: currentCardIndex) else {
-            return
-        }
-        
-        var selectedCardIndex = -1
-        let touchPoint = sender.location(in: contentView)
-        if touchPoint.x > currentCard.frame.maxX {
-            selectedCardIndex = currentCardIndex + 1
-        } else if touchPoint.x < currentCard.frame.minX {
-            selectedCardIndex = currentCardIndex - 1
-        } else {
-            delegate?.cardViewController(self, didSelect: currentCard, at: currentCardIndex)
-            return
-        }
-        
-        scrollToCardAtIndex(selectedCardIndex)
-    }
     
     ///Navigates to the card at the received index, if the index is within bounds
     public func scrollToCardAtIndex(_ index: Int) {

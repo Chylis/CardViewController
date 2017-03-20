@@ -63,7 +63,7 @@
         </viewController>
         <tapGestureRecognizer cancelsTouchesInView="NO" id="rW2-Qf-cmL">
             <connections>
-                <action selector="onScrollViewTapped:" destination="4hg-UC-Q7x" id="wph-nO-qZr"/>
+                <action selector="iOS_onScrollViewTapped:" destination="4hg-UC-Q7x" id="h3d-tY-h59"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

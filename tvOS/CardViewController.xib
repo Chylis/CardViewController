@@ -63,8 +63,9 @@
             <point key="canvasLocation" x="1" y="-37"/>
         </viewController>
         <tapGestureRecognizer cancelsTouchesInView="NO" id="rW2-Qf-cmL">
+            <pressTypeMask key="allowedPressTypes" select="YES" playPause="YES"/>
             <connections>
-                <action selector="onScrollViewTapped:" destination="4hg-UC-Q7x" id="wph-nO-qZr"/>
+                <action selector="tvos_onScrollViewTapped:" destination="4hg-UC-Q7x" id="IbA-3h-eYE"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

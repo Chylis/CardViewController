@@ -47,6 +47,7 @@
 		5F07C6451E7D941B00306797 /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F07C6441E7D941B00306797 /* CardViewController.xib */; };
 		5F07C6471E7D942F00306797 /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F07C6461E7D942F00306797 /* CardViewController.xib */; };
 		5F07C6631E7DA24B00306797 /* CardViewController+tvOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F07C6621E7DA24B00306797 /* CardViewController+tvOS.swift */; };
+		5FA8B5651E80165600EBEC4D /* CardViewController+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA8B5641E80165600EBEC4D /* CardViewController+iOS.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		5F07C6441E7D941B00306797 /* CardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
 		5F07C6461E7D942F00306797 /* CardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
 		5F07C6621E7DA24B00306797 /* CardViewController+tvOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardViewController+tvOS.swift"; sourceTree = "<group>"; };
+		5FA8B5641E80165600EBEC4D /* CardViewController+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardViewController+iOS.swift"; sourceTree = "<group>"; };
 		5FB0D2C21D79FFA30000070F /* CardViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CardViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				5F07C6441E7D941B00306797 /* CardViewController.xib */,
+				5FA8B5641E80165600EBEC4D /* CardViewController+iOS.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				5F07C63A1E7D93CC00306797 /* CardInterpolator.swift in Sources */,
 				5F07C6391E7D93CC00306797 /* CATransform3DUtils.swift in Sources */,
 				5F07C63B1E7D93CC00306797 /* CardViewController.swift in Sources */,
+				5FA8B5651E80165600EBEC4D /* CardViewController+iOS.swift in Sources */,
 				5F07C63D1E7D93CC00306797 /* UIScrollView+Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -581,6 +585,7 @@
 				5F07C6261E7D937D00306797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5F07C6491E7D958F00306797 /* Build configuration list for PBXAggregateTarget "CardViewControllerFramework_iOS" */ = {
 			isa = XCConfigurationList;
@@ -589,6 +594,7 @@
 				5F07C64B1E7D958F00306797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5F07C6501E7D95E600306797 /* Build configuration list for PBXAggregateTarget "CardViewControllerFramework_tvOS" */ = {
 			isa = XCConfigurationList;
@@ -597,6 +603,7 @@
 				5F07C6521E7D95E600306797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5FB0D2BC1D79FFA20000070F /* Build configuration list for PBXProject "CardViewController" */ = {
 			isa = XCConfigurationList;
