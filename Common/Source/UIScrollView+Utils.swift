@@ -15,7 +15,7 @@ extension UIScrollView {
         static var pageSizeFactor = "mge_ScrollViewPageSizeFactor"
     }
     
-    var pageSizeFactor: CGFloat? {
+    var cv_pageSizeFactor: CGFloat? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.pageSizeFactor) as? CGFloat
         }
@@ -33,9 +33,9 @@ extension UIScrollView {
 
 extension UIScrollView {
     
-    func scrollToPageAtIndex(_ index: Int, animated: Bool = false) {
-        let newX = CGFloat(index) * pageSize()
-        setHorizontalContentOffset(newX, animated: animated)
+    func cv_scrollToPageAtIndex(_ index: Int, animated: Bool = false) {
+        let newX = CGFloat(index) * cv_pageSize()
+        cv_setHorizontalContentOffset(newX, animated: animated)
     }
     
     /**
@@ -43,8 +43,8 @@ extension UIScrollView {
      Minimum value is 0 (i.e. left of first page).
      Maximum value is 'contentSize.width - pageSize' (i.e. left of last page)
      */
-    func setHorizontalContentOffset(_ x: CGFloat, animated: Bool = false) {
-        let newX = max(minimumHorizontalOffset(), min(maximumHorizontalOffset(), x))
+    func cv_setHorizontalContentOffset(_ x: CGFloat, animated: Bool = false) {
+        let newX = max(cv_minimumHorizontalOffset(), min(cv_maximumHorizontalOffset(), x))
         setContentOffset(CGPoint(x: newX, y: 0), animated: animated)
     }
     
@@ -52,8 +52,8 @@ extension UIScrollView {
      Calculates the current X-scroll percentage within the current page.
      Starts at index 0. E.g. if the scroll view is 50% between page 5 and 6, this function will return 4.5
      */
-    func horizontalPercentScrolledInCurrentPage() -> CGFloat {
-        let maxHorizontalOffset = pageSize()
+    func cv_horizontalPercentScrolledInCurrentPage() -> CGFloat {
+        let maxHorizontalOffset = cv_pageSize()
         if maxHorizontalOffset > 0 {
             return (contentOffset.x / maxHorizontalOffset)
         }
@@ -64,31 +64,31 @@ extension UIScrollView {
     /**
      Minimum value is 0 (i.e. left of first page).
      */
-    func minimumHorizontalOffset() -> CGFloat {
+    func cv_minimumHorizontalOffset() -> CGFloat {
         return 0
     }
     
     /**
      Maximum value is 'contentSize.width - pageSize' (i.e. left of last page)
      */
-    func maximumHorizontalOffset() -> CGFloat {
-        return contentSize.width - pageSize()
+    func cv_maximumHorizontalOffset() -> CGFloat {
+        return contentSize.width - cv_pageSize()
     }
     
     /**
      Returns the current page number, or -1 if content offset is < 0
      */
-    func currentPage() -> Int {
+    func cv_currentPage() -> Int {
         guard contentOffset.x >= 0 else {
             return -1
         }
         
-        let pageNumber = Int(contentOffset.x / pageSize())
+        let pageNumber = Int(contentOffset.x / cv_pageSize())
         return pageNumber
     }
     
-    func pageSize() -> CGFloat {
+    func cv_pageSize() -> CGFloat {
         //NOTE: This value must correspond to the card width + card spacing
-        return bounds.size.width * (pageSizeFactor ?? 0.5)
+        return bounds.size.width * (cv_pageSizeFactor ?? 0.5)
     }
 }

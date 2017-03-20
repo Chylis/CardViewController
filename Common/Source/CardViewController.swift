@@ -41,7 +41,7 @@ public class CardViewController: UIViewController {
     ///The size of the card in relation to the parent view. By default, a card is half the size of the parent view.
     public var cardSizeRatio: CGFloat = 0.5 {
         didSet {
-            scrollView.pageSizeFactor = cardSizeRatio
+            scrollView.cv_pageSizeFactor = cardSizeRatio
         }
     }
     
@@ -123,7 +123,7 @@ public class CardViewController: UIViewController {
     
     override public func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        pageIndexBeforeTraitCollectionChange = scrollView.currentPage()
+        pageIndexBeforeTraitCollectionChange = scrollView.cv_currentPage()
     }
     
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -135,7 +135,7 @@ public class CardViewController: UIViewController {
             CATransaction.begin()
             self.updateOrientationRelatedConstraints()
             self.applyInitialCardTransform()
-            self.scrollView.scrollToPageAtIndex(self.pageIndexBeforeTraitCollectionChange, animated: false)
+            self.scrollView.cv_scrollToPageAtIndex(self.pageIndexBeforeTraitCollectionChange, animated: false)
             CATransaction.commit()
         }
     }
@@ -186,7 +186,7 @@ public class CardViewController: UIViewController {
             return
         }
         scrollViewWillScrollToCard()
-        scrollView.scrollToPageAtIndex(index, animated: true)
+        scrollView.cv_scrollToPageAtIndex(index, animated: true)
     }
     
     ///Prepares the scroll view prior to programatically scrolling to a card
@@ -243,14 +243,14 @@ extension CardViewController: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let isGoingBackwards = scrollView.currentPage() < currentCardIndex
+        let isGoingBackwards = scrollView.cv_currentPage() < currentCardIndex
         
         //"percentScrolledInPage" represents the X-scroll percentage within the current page, starting at index 0.
         //E.g. if the scroll view is 50% between page 5 and 6, the  will be 4.5
-        let percentScrolledInPage = scrollView.horizontalPercentScrolledInCurrentPage()
+        let percentScrolledInPage = scrollView.cv_horizontalPercentScrolledInCurrentPage()
         
         //The transition progress of the leftmost page involved in the transition
-        let leftTransitionProgress = percentScrolledInPage - CGFloat(scrollView.currentPage())
+        let leftTransitionProgress = percentScrolledInPage - CGFloat(scrollView.cv_currentPage())
         
         //The transition progress of the rightmost page involved in the transition (the opposite of the leftTransitionProgress)
         let rightTransitionProgress = (1 - leftTransitionProgress)
@@ -266,7 +266,7 @@ extension CardViewController: UIScrollViewDelegate {
         destTransitionProgress *= isGoingBackwards ? 1 : -1
         
         //The index of the leftmost element involved in the transition
-        let transitionLeftElementIndex = scrollView.currentPage()
+        let transitionLeftElementIndex = scrollView.cv_currentPage()
         
         //The index of the rightmost element involved in the transition
         let transitionRightElementIndex = transitionLeftElementIndex + 1
@@ -349,18 +349,18 @@ extension CardViewController: UIScrollViewDelegate {
     ///Save the index of the current card when the scroll view has stopped scrolling
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            currentCardIndex = scrollView.currentPage()
+            currentCardIndex = scrollView.cv_currentPage()
         }
     }
     
     ///Save the index of the current card when the scroll view has stopped scrolling
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        currentCardIndex = scrollView.currentPage()
+        currentCardIndex = scrollView.cv_currentPage()
     }
     
     ///Called when the scroll view ends scrolling programatically (e.g. when a user taps on a card)
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        currentCardIndex = scrollView.currentPage()
+        currentCardIndex = scrollView.cv_currentPage()
         
         //Restore the settings
         scrollViewDidScrollToCard()
