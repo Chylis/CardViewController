@@ -8,19 +8,27 @@
 
 import Foundation
 
-//MARK: TVOS UIFocusEnvironment
-
 extension CardViewController {
     
-    //TODO: Consider alternative to extensions in a framework.
-    public override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+    override public func shouldUpdateFocus(in context: UIFocusUpdateContext) -> Bool {
         guard let destinationView = context.nextFocusedView,
             let destinationIndex = cards.index(of: destinationView),
             currentCardIndex != destinationIndex else {
+                return false
+        }
+        return true
+    }
+    
+    public override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        //context.nextFocusedView may be nil if we're e.g. dismissing the current view controller
+        guard let destinationView = context.nextFocusedView,
+            let destinationIndex = cards.index(of: destinationView) else {
                 return
         }
         
-        scrollToCardAtIndex(destinationIndex)
+        coordinator.addCoordinatedAnimations({
+            self.scrollToCardAtIndex(destinationIndex)
+        })
     }
     
     @IBAction func tvos_onScrollViewTapped(_ sender: UITapGestureRecognizer) {

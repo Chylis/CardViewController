@@ -83,7 +83,8 @@ public class CardViewController: UIViewController {
     //MARK: Properties
     
     private var hasLaidOutSubviews = false
-    internal var currentCardIndex: Int = 0 {
+    
+    public internal(set) var currentCardIndex: Int = 0 {
         didSet {
             guard let delegate = delegate,
                 let card = card(at: currentCardIndex),
@@ -93,7 +94,7 @@ public class CardViewController: UIViewController {
             delegate.cardViewController(self, didNavigateTo: card, at: currentCardIndex)
         }
     }
-    internal var cards: [UIView] = []
+    public fileprivate(set) var cards: [UIView] = []
     
     //Spacing between cards
     fileprivate let cardSpacing: CGFloat = 0
@@ -139,6 +140,14 @@ public class CardViewController: UIViewController {
             
             //Set up height in relation to the card's own width
             card.heightAnchor.constraint(equalTo: card.widthAnchor, multiplier: cardHeightRatio).isActive = true
+            
+//            let focusGuide = UIFocusGuide()
+//            card.addLayoutGuide(focusGuide)
+//            focusGuide.rightAnchor.constraintEqualToAnchor(self.btnPlay.rightAnchor).active = true
+//            focusGuide.topAnchor.constraintEqualToAnchor(self.switchFirst.topAnchor).active = true
+//            focusGuide.widthAnchor.constraintEqualToAnchor(self.btnPlay.widthAnchor).active = true
+//            focusGuide.heightAnchor.constraintEqualToAnchor(self.switchFirst.heightAnchor).active = true
+//            focusGuide.preferredFocusedView = self.switchFirst
         }
     }
     
@@ -171,18 +180,16 @@ public class CardViewController: UIViewController {
     }
     
     
-    //MARK: Helper
+    //MARK: Public
     
     /// Returns the card at the received index, or nil if the index is out of bounds
-    internal func card(at index: Int) -> UIView? {
+    public func card(at index: Int) -> UIView? {
         guard index >= 0 && index < cards.count else {
             return nil
         }
         
         return cards[index]
     }
-    
-    //MARK: Card navigation
     
     ///Navigates to the card at the received index, if the index is within bounds
     public func scrollToCardAtIndex(_ index: Int) {
