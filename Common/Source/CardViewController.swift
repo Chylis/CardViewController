@@ -140,6 +140,11 @@ public class CardViewController: UIViewController {
         super.viewDidLoad()
         contentView.spacing = cardSpacing
         scrollView.bounces = isBounceEnabled
+        
+        #if os(tvOS)
+            //Workaround to enable smooth scrolling in tvOS
+            scrollView.isScrollEnabled = false
+        #endif
     }
     
     //MARK: Rotation related events
@@ -187,7 +192,12 @@ public class CardViewController: UIViewController {
         guard card(at: index) != nil else {
             return
         }
-        scrollViewWillScrollToCard()
+        
+        #if os(iOS)
+            //On iOS: Disable manual scrolling during programatical scrolling
+            scrollViewWillScrollToCard()
+        #endif
+        
         scrollView.cv_scrollToPageAtIndex(index, animated: true)
     }
     
@@ -378,7 +388,9 @@ extension CardViewController: UIScrollViewDelegate {
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         currentCardIndex = scrollView.cv_currentPage()
         
-        //Restore the settings
-        scrollViewDidScrollToCard()
+        //Restore the settings. Will not be called on tvOS
+        #if os(iOS)
+            scrollViewDidScrollToCard()
+        #endif
     }
 }
