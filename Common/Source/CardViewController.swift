@@ -36,6 +36,22 @@ public class CardViewController: UIViewController {
     
     public weak var delegate: CardViewControllerDelegate? = nil
     
+    ///The card views
+    public var cards: [UIView] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                oldValue.forEach { $0.removeFromSuperview() }
+                self.add(cards: self.cards)
+                self.applyInitialCardTransform()
+                self.scrollView.cv_scrollToPageAtIndex(0, animated: false)
+                self.currentCardIndex = 0
+                CATransaction.commit()
+            }
+        }
+    }
+    
     ///The width of the card in relation to the parent view. 
     ///Must be between 0.1 - 1.0. Default is 0.5 (i.e. half the size of the parent view).
     public var cardWidthRatio: CGFloat = 0.5 {
@@ -80,10 +96,12 @@ public class CardViewController: UIViewController {
     ///The transition interpolation applied to the destination card during transition
     public var destinationTransitionInterpolator: TransitionInterpolator = CardInterpolator.cubicOut
     
+    
+    
+    
     //MARK: Properties
     
-    private var hasLaidOutSubviews = false
-    
+    ///The index of the current card
     public internal(set) var currentCardIndex: Int = 0 {
         didSet {
             guard let delegate = delegate,
@@ -94,13 +112,15 @@ public class CardViewController: UIViewController {
             delegate.cardViewController(self, didNavigateTo: card, at: currentCardIndex)
         }
     }
-    public fileprivate(set) var cards: [UIView] = []
     
-    //Spacing between cards
+    ///Spacing between cards
     fileprivate let cardSpacing: CGFloat = 0
     
-    //The current page before the trait collection changes, e.g. prior to rotation occurrs
+    ///The current page before the trait collection changes, e.g. prior to rotation occurrs
     private var pageIndexBeforeTraitCollectionChange: Int = 0
+    
+    
+    
     
     //MARK: IBOutlets
     
@@ -110,45 +130,16 @@ public class CardViewController: UIViewController {
     @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var contentViewTapGestureRecognizer: UITapGestureRecognizer!
     
+   
+    
+    
+    
     //MARK: Life cycle
     
     override public func viewDidLoad() {
         super.viewDidLoad()
         contentView.spacing = cardSpacing
         scrollView.bounces = isBounceEnabled
-    }
-    
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // Wait until 'viewDidAppear' to layout the 'card-views' since 'self.view'
-        // has not been laid out prior to that (and therefore we don't have a reliable 'self.view.frame')
-        if !hasLaidOutSubviews {
-            hasLaidOutSubviews = true
-            add(cards: cards)
-        }
-    }
-    
-    private func add(cards: [UIView]) {
-        for card in cards {
-            //IMPORTANT: Changes to the horizontal spacing between cards must be reflected in 'UIScrollView::pageSize()' to account for it
-            contentView.addArrangedSubview(card)
-            card.translatesAutoresizingMaskIntoConstraints = false
-            
-            //Set up width in relation to the parent view
-            card.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: cardWidthRatio).isActive = true
-            
-            //Set up height in relation to the card's own width
-            card.heightAnchor.constraint(equalTo: card.widthAnchor, multiplier: cardHeightRatio).isActive = true
-            
-//            let focusGuide = UIFocusGuide()
-//            card.addLayoutGuide(focusGuide)
-//            focusGuide.rightAnchor.constraintEqualToAnchor(self.btnPlay.rightAnchor).active = true
-//            focusGuide.topAnchor.constraintEqualToAnchor(self.switchFirst.topAnchor).active = true
-//            focusGuide.widthAnchor.constraintEqualToAnchor(self.btnPlay.widthAnchor).active = true
-//            focusGuide.heightAnchor.constraintEqualToAnchor(self.switchFirst.heightAnchor).active = true
-//            focusGuide.preferredFocusedView = self.switchFirst
-        }
     }
     
     //MARK: Rotation related events
@@ -214,6 +205,20 @@ public class CardViewController: UIViewController {
     
     
     //MARK: Card transform
+    
+    private func add(cards: [UIView]) {
+        for card in cards {
+            //IMPORTANT: Changes to the horizontal spacing between cards must be reflected in 'UIScrollView::pageSize()' to account for it
+            contentView.addArrangedSubview(card)
+            card.translatesAutoresizingMaskIntoConstraints = false
+            
+            //Set up width in relation to the parent view
+            card.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: cardWidthRatio).isActive = true
+            
+            //Set up height in relation to the card's own width
+            card.heightAnchor.constraint(equalTo: card.widthAnchor, multiplier: cardHeightRatio).isActive = true
+        }
+    }
     
     private func applyInitialCardTransform() {
         for (index, card) in cards.enumerated() {
