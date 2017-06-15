@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12117" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13122.17" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12084"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,9 +47,9 @@
                     <constraint firstItem="b3l-Da-H5R" firstAttribute="width" secondItem="0wV-td-5YW" secondAttribute="width" placeholder="YES" id="GqM-sN-SIa"/>
                     <constraint firstItem="yIf-Mh-bFq" firstAttribute="leading" secondItem="0wV-td-5YW" secondAttribute="leading" id="LHR-Ty-8P5"/>
                     <constraint firstAttribute="trailing" secondItem="yIf-Mh-bFq" secondAttribute="trailing" id="VO4-PG-Q83"/>
-                    <constraint firstItem="yIf-Mh-bFq" firstAttribute="top" secondItem="0wV-td-5YW" secondAttribute="topMargin" id="X3w-Xu-kzL"/>
+                    <constraint firstItem="yIf-Mh-bFq" firstAttribute="top" secondItem="0wV-td-5YW" secondAttribute="top" id="X3w-Xu-kzL"/>
                     <constraint firstItem="b3l-Da-H5R" firstAttribute="height" secondItem="0wV-td-5YW" secondAttribute="height" id="dD1-rt-AKx"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="yIf-Mh-bFq" secondAttribute="bottom" id="l8H-lr-c7b"/>
+                    <constraint firstAttribute="bottom" secondItem="yIf-Mh-bFq" secondAttribute="bottom" id="l8H-lr-c7b"/>
                 </constraints>
             </view>
             <connections>
