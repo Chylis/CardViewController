@@ -373,7 +373,6 @@
 				PRODUCT_NAME = CardViewController;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
@@ -397,7 +396,6 @@
 				PRODUCT_NAME = CardViewController;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
@@ -566,7 +564,6 @@
 				PRODUCT_NAME = CardViewController;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -587,7 +584,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = se.magmag.test.CardViewController;
 				PRODUCT_NAME = CardViewController;
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

@@ -24,7 +24,7 @@
 
 ## Installation:
   - Fetch with Carthage, e.g:
-  - 'github "apegroup/aepegroup-cardviewcontroller-ios"'
+  - 'github "chylis/CardViewController"'
 
 ## Usage example:
 Get started with 3 easy steps:
