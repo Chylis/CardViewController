@@ -116,8 +116,7 @@ public class CardViewController: UIViewController {
     ///Spacing between cards
     fileprivate let cardSpacing: CGFloat = 0
     
-    ///The current page before the trait collection changes, e.g. prior to rotation occurrs
-    private var pageIndexBeforeTraitCollectionChange: Int = 0
+    private var pageIndexBeforeRotation: Int = 0
     
     
     
@@ -145,27 +144,29 @@ public class CardViewController: UIViewController {
             //Workaround to enable smooth scrolling in tvOS
             scrollView.isScrollEnabled = false
         #endif
+        
+        handleRotation()
     }
     
     //MARK: Rotation related events
     
-    override public func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.willTransition(to: newCollection, with: coordinator)
-        pageIndexBeforeTraitCollectionChange = scrollView.cv_currentPage()
+    override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        pageIndexBeforeRotation = scrollView.cv_currentPage()
+        
+        coordinator.animate(alongsideTransition: { context in
+            //Restore previous page
+            self.handleRotation()
+        })
+        
+        super.viewWillTransition(to: size, with: coordinator)
     }
     
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        //Restore previous page.
-        //A slight delay is required since the scroll view's frame size has not yet been updated to reflect the new trait collection.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            CATransaction.begin()
-            self.updateOrientationRelatedConstraints()
-            self.applyInitialCardTransform()
-            self.scrollView.cv_scrollToPageAtIndex(self.pageIndexBeforeTraitCollectionChange, animated: false)
-            CATransaction.commit()
-        }
+    private func handleRotation() {
+        updateOrientationRelatedConstraints()
+        applyInitialCardTransform()
+        scrollView.cv_scrollToPageAtIndex(pageIndexBeforeRotation, animated: false)
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     /// Updates the leading and trailing constraints to the remaining width of the screen

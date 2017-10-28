@@ -50,13 +50,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = cardVc
         window?.makeKeyAndVisible()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            cardVc.cards = self.cardViews1()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            cardVc.cards = self.cardViews2()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            cardVc.cards = self.cardViews1()
+//        }
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+//            cardVc.cards = self.cardViews2()
+//        }
         return true
     }
     
